@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gabut</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #ffe4e1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Container untuk emoji latar belakang */
+        .bg-emojis {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Style animasi emoji background */
+        .falling-emoji {
+            position: absolute;
+            top: -50px;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95); 
+            padding: 35px 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 35px rgba(255, 77, 109, 0.25); 
+            max-width: 400px;
+            width: 90%;
+            backdrop-filter: blur(5px);
+            border: 2px solid #ffccd5;
+            position: relative;
+            z-index: 10; 
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #4a4a4a;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .gif-container img {
+            width: 160px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+        }
+
+        .btn-group {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 65px;
+            position: relative; 
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        #yesBtn:hover {
+            background-color: #ff758f;
+            transform: scale(1.15);
+            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        #noBtn {
+            background-color: #e0e0e0;
+            color: #555;
+            position: absolute;
+            left: 55%; 
+            white-space: nowrap;
+            transition: left 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        top 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        background-color 0.2s;
+        }
+
+        /* Pop-up Sukses */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.55);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 35px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 350px;
+            width: 85%;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #ff4d6d;
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Efek partikel hati di dalam modal */
+        .heart-particle {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 20px;
+            pointer-events: none;
+            animation: flyUp 1.5s linear forwards;
+            bottom: 0;
+        }
+
+        @keyframes flyUp {
+            0% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-300px) translateX(var(--x-move)) scale(0.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-emojis" id="bgEmojis"></div>
+
+    <div class="container">
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3B0ZndpYnN0ZndpM3B0ZndpM3B0ZndpM3B0ZndpM3B0ZndpJnB0X2luc2lkZV9naWZfYnlfaWRudW0mY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Cat">
+        </div>
+        
+        <h1>Halo Cantik! ❤️</h1>
+        <p>Aku mau nanya sesuatu hal yang sangat amat krusial... Kamu sayang gak sih sama aku?</p>
+
+        <div class="btn-group">
+            <button id="yesBtn" onclick="tampilkanPesan()">Sayang Banget! 🥰</button>
+            <button id="noBtn" onmouseover="pindahTombol()" onclick="pindahTombol()">Enggak 😜</button>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW9pM3B0ZndpM3B0ZndpM3B0ZndpM3B0ZndpM3B0ZndpM3B0ZndpJnB0X2luc2lkZV9naWZfYnlfaWRudW0mY3Q9cw/v9N6wM66shR9XUuV4o/giphy.gif" width="130">
+            <h2 style="color: #ff4d6d; margin-top: 10px;">Yeeeaaayyy! 🥳</h2>
+            <p style="font-weight: 600;">Makasih ya udah sayang sama aku! Sini peluk online dulu 🤗❤️</p>
+            <p style="font-size: 13px; color: #888; margin-top: 15px;">Mengirimkan jawaban cintamu secara instan... ✨</p>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const modal = document.getElementById('myModal');
+        const modalContent = document.getElementById('modalContent');
+        const bgEmojis = document.getElementById('bgEmojis');
+
+        const posisiAwalX = noBtn.offsetLeft;
+        const posisiAwalY = noBtn.offsetTop;
+        const radiusLompat = 70; 
+
+        // ⚠️ PENTING: Ganti dengan nomor WhatsApp kamu sendiri! 
+        // Gunakan format kode negara di awal (contoh: 6281234567890 tanpa tanda + atau spasi)
+        const nomorWA = "6285781283601"; 
+        const isiPesan = "Aku sayang banget sama kamu! ❤️";
+
+        const kalimatLucu = [
+            "Enggak 😜",
+            "Eh ga bisa milih ini 🤪",
+            "Masa enggak? 🥺",
+            "no no no 🤪",
+            "Eits salah tombol! ❌",
+            "Gak boleh klik ini! 😝",
+            "Yakin nih? 🤔"
+        ];
+
+        const kumpulanEmoji = ['❤️', '💖', '🥰', '✨', '🌸', '😻', '💘'];
+
+        function buatEmojiBackground() {
+            const emojiEl = document.createElement('div');
+            emojiEl.classList.add('falling-emoji');
+            emojiEl.innerText = kumpulanEmoji[Math.floor(Math.random() * kumpulanEmoji.length)];
+            emojiEl.style.left = Math.random() * 100 + 'vw';
+            emojiEl.style.fontSize = (Math.random() * 20 + 15) + 'px'; 
+            
+            const durasi = Math.random() * 3 + 4; 
+            emojiEl.style.animationDuration = durasi + 's';
+            bgEmojis.appendChild(emojiEl);
+            
+            setTimeout(() => { emojiEl.remove(); }, durasi * 1000);
+        }
+
+        setInterval(buatEmojiBackground, 300);
+
+        function pindahTombol() {
+            const acakX = (Math.random() - 0.5) * 2 * radiusLompat;
+            const acakY = (Math.random() - 0.5) * 2 * radiusLompat;
+
+            noBtn.style.left = (posisiAwalX + acakX) + 'px';
+            noBtn.style.top = (posisiAwalY + acakY) + 'px';
+
+            const indeksAcak = Math.floor(Math.random() * kalimatLucu.length);
+            noBtn.innerText = kalimatLucu[indeksAcak];
+            
+            noBtn.style.backgroundColor = "#ffe5ec";
+            noBtn.style.color = "#ff4d6d";
+        }
+
+        function tampilkanPesan() {
+            modal.style.display = 'flex';
+            buatEfekHati();
+
+            // Menggunakan skema deteksi platform untuk mempercepat proses kirim
+            setTimeout(() => {
+                let urlWA = "";
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // Di HP langsung tembak ke skema tautan chat
+                    urlWA = `whatsapp://send?phone=${nomorWA}&text=${encodeURIComponent(isiPesan)}`;
+                } else {
+                    // Di laptop diarahkan ke web WhatsApp send khusus bypass
+                    urlWA = `https://web.whatsapp.com/send?phone=${nomorWA}&text=${encodeURIComponent(isiPesan)}`;
+                }
+                
+                window.location.href = urlWA;
+            }, 1200);
+        }
+
+        function buatEfekHati() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart-particle');
+                    heart.innerHTML = '❤️';
+                    
+                    heart.style.left = Math.random() * 80 + 10 + '%';
+                    heart.style.setProperty('--x-move', (Math.random() - 0.5) * 60 + 'px');
+                    
+                    modalContent.appendChild(heart);
+                    
+                    setTimeout(() => { heart.remove(); }, 1500);
+                }, i * 100);
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
